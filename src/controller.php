@@ -334,7 +334,7 @@ $this->get('/admin/package/install/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/../bin/package.sh %s install %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s install %s >> package-install.log &';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
@@ -382,7 +382,7 @@ $this->get('/admin/package/update/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/../bin/package.sh %s update %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s update %s >> package-install.log &';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
@@ -431,7 +431,7 @@ $this->get('/admin/package/remove/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/../bin/package.sh %s remove %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s remove %s >> package-install.log &';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
