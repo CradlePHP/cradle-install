@@ -26,6 +26,23 @@ $this->get('/admin/package/search', function ($request, $response) {
     // get the package config
     $config = $this->package('global')->config('packages');
 
+    // load composer lock
+    $composerLock = json_decode(
+        file_get_contents(
+            $this->package('global')->path('root') . '/composer.lock'
+        ),
+        true
+    );
+
+    // available composer packages
+    $composerPackages = [];
+
+    // iterate on each package on lock file
+    foreach($composerLock['packages'] as $composerPackage) {
+        // get the composer package name and version
+        $composerPackages[$composerPackage['name']] = $composerPackage['version'];
+    }
+
     // set package list action
     $request->setStage(0, 'list');
     // we just only need the data
@@ -112,6 +129,13 @@ $this->get('/admin/package/search', function ($request, $response) {
                 // remove type
                 if (isset($composer['type'])) {
                     unset($composer['type']);
+                }
+
+                // get composer installed version
+                $packages[$key]['composer_version'] = null;
+
+                if (isset($composerPackages[$key])) {
+                    $packages[$key]['composer_version'] = $composerPackages[$key];
                 }
 
                 // merge composer data

@@ -47,7 +47,8 @@
                     <tr>
                         <th>Actions</th>
                         <th>Name</th>
-                        <th>Version</th>
+                        <th>Install Version</th>
+                        <th>Composer Version</th>
                         <th>Type</th>
                         <th>Last Status</th>
                     </tr>
@@ -116,6 +117,13 @@
                             <td>
                                 {{#if version}}
                                     {{version}}
+                                {{else}}
+                                    Not Available
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{#if composer_version}}
+                                    {{composer_version}}
                                 {{else}}
                                     Not Available
                                 {{/if}}
