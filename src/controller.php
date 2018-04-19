@@ -358,13 +358,25 @@ $this->get('/admin/package/install/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/bin/package.sh %s install %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s install %s 2>&1';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
-    exec($exec);
+    exec($exec, $output);
 
-    $this->package('global')->flash('Package is being installed. Please wait for the process to finish.', 'success');
+    // do we have an output?
+    if (!empty($output)) {
+        // maybe an error?
+        $this->package('global')->flash(implode(PHP_EOL, $output), 'error');
+    } else {
+        $this->package('global')->flash('Package is being installed. Please wait for the process to finish.', 'success');        
+    }
+
+
+    // redirect back to packagist search
+    if ($request->hasStage('redirect')) {
+        return $this->package('global')->redirect($request->getStage('redirect'));
+    }
 
     // redirect back to packagist search
     if ($request->getStage('type') == 'vendor') {
@@ -406,13 +418,24 @@ $this->get('/admin/package/update/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/bin/package.sh %s update %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s update %s 2>&1';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
-    exec($exec);
+    exec($exec, $output);
 
-    $this->package('global')->flash('Package is being updated. Please wait for the process to finish.', 'success');
+    // do we have an output?
+    if (!empty($output)) {
+        // maybe an error?
+        $this->package('global')->flash(implode(PHP_EOL, $output), 'error');
+    } else {
+        $this->package('global')->flash('Package is being updated. Please wait for the process to finish.', 'success');
+    }
+
+    // redirect back to packagist search
+    if ($request->hasStage('redirect')) {
+        return $this->package('global')->redirect($request->getStage('redirect'));
+    }
 
     // redirect back to packagist search
     if ($request->getStage('type') == 'vendor') {
@@ -455,13 +478,19 @@ $this->get('/admin/package/remove/:name', function ($request, $response) {
     // for us to be able to execute a long running script
     // while redirecting all the output to a file, we need
     // to wrap the command via a shell script. Tricky...
-    $exec = __DIR__ . '/bin/package.sh %s remove %s >> package-install.log &';
+    $exec = __DIR__ . '/bin/package.sh %s remove %s 2>&1';
     $exec = sprintf($exec, $root, $name);
 
     // execute the command
-    exec($exec);
-
-    $this->package('global')->flash('Package is being removed. Please wait for the process to finish.', 'success');
+    exec($exec, $output);
+    
+    // do we have an output?
+    if (!empty($output)) {
+        // maybe an error?
+        $this->package('global')->flash(implode(PHP_EOL, $output), 'error');
+    } else {
+        $this->package('global')->flash('Package is being removed. Please wait for the process to finish.', 'success');
+    }
 
     // redirect back to packagist search
     if ($request->hasStage('redirect')) {

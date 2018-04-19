@@ -76,11 +76,11 @@
                                                 <a class="text-warning" href="/admin/package/remove/{{key}}?type={{type}}" title="Remove Package">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
-                                                <a href="/admin/package/update/{{key}}?type={{type}}" title="Update Package">
+                                                <a href="/admin/package/update/{{key}}?type={{type}}&redirect=/admin/package/search" title="Update Package">
                                                     <i class="fas fa-upload"></i>
                                                 </a>
                                             {{else}}
-                                                <a href="/admin/package/install/{{key}}?type={{type}}" title="Install Package">
+                                                <a href="/admin/package/install/{{key}}?type={{type}}&redirect=/admin/package/search" title="Install Package">
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                             {{/if}}
