@@ -9,7 +9,7 @@
 
 /**
  * Render Package Search
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -50,7 +50,7 @@ $this->get('/admin/package/search', function ($request, $response) {
 
     // get the list of packages
     $this->trigger('package', $request, $response);
-    
+
     // get the packages
     $packages = $response->getResults();
 
@@ -120,7 +120,7 @@ $this->get('/admin/package/search', function ($request, $response) {
                     file_get_contents(sprintf($composer, $key)),
                     true
                 );
-                
+
                 // remove version
                 if (isset($composer['version'])) {
                     unset($composer['version']);
@@ -183,10 +183,15 @@ $this->get('/admin/package/search', function ($request, $response) {
         }
     }
 
-    // $this->inspect($packages);
+    $pkgs = [];
+    foreach ($config as $key => $value) {
+        if (isset($packages[$key])) {
+            $pkgs[$key] = $packages[$key];
+        }
+    }
 
     // merge data
-    $data = array_merge([ 'rows' => $packages, 'total' => count($packages) ], $request->getStage());
+    $data = array_merge([ 'rows' => $pkgs, 'total' => count($pkgs) ], $request->getStage());
 
     //----------------------------//
     // 2. Render Template
@@ -207,14 +212,14 @@ $this->get('/admin/package/search', function ($request, $response) {
 
 /**
  * Render Packagists Search
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
 $this->get('/admin/package/packagist/search', function ($request, $response) {
     //----------------------------//
     // 1. Prepare Data
-    
+
     // get registered package
     $registered = $this->package('global')->config('packages');
 
@@ -328,7 +333,7 @@ $this->get('/admin/package/packagist/search', function ($request, $response) {
 
 /**
  * Process Package Install
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -350,7 +355,7 @@ $this->get('/admin/package/install/:name', function ($request, $response) {
     } else {
         $name = str_replace(':', '/', $name);
     }
-    
+
     // get the root path
     $root = $this->package('global')->path('root');
 
@@ -369,7 +374,7 @@ $this->get('/admin/package/install/:name', function ($request, $response) {
         // maybe an error?
         $this->package('global')->flash(implode(PHP_EOL, $output), 'error');
     } else {
-        $this->package('global')->flash('Package is being installed. Please wait for the process to finish.', 'success');        
+        $this->package('global')->flash('Package is being installed. Please wait for the process to finish.', 'success');
     }
 
 
@@ -388,7 +393,7 @@ $this->get('/admin/package/install/:name', function ($request, $response) {
 
 /**
  * Process Package Update
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -410,7 +415,7 @@ $this->get('/admin/package/update/:name', function ($request, $response) {
     } else {
         $name = str_replace(':', '/', $name);
     }
-    
+
     // get the root path
     $root = $this->package('global')->path('root');
 
@@ -448,7 +453,7 @@ $this->get('/admin/package/update/:name', function ($request, $response) {
 
 /**
  * Process Package Remove
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -470,7 +475,7 @@ $this->get('/admin/package/remove/:name', function ($request, $response) {
     } else {
         $name = str_replace(':', '/', $name);
     }
-    
+
     // get the root path
     $root = $this->package('global')->path('root');
 
@@ -483,7 +488,7 @@ $this->get('/admin/package/remove/:name', function ($request, $response) {
 
     // execute the command
     exec($exec, $output);
-    
+
     // do we have an output?
     if (!empty($output)) {
         // maybe an error?
@@ -502,7 +507,7 @@ $this->get('/admin/package/remove/:name', function ($request, $response) {
 
 /**
  * Process Package Enable
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -513,7 +518,7 @@ $this->get('/admin/package/enable/:name', function ($request, $response) {
         $this->package('global')->flash('Invalid Request', 'error');
         return $this->package('global')->redirect('/admin/package/search');
     }
-    
+
     // get package name
     $name = $request->getStage('name');
     // get package path
@@ -556,7 +561,7 @@ $this->get('/admin/package/enable/:name', function ($request, $response) {
 
 /**
  * Process Package Disable
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -567,7 +572,7 @@ $this->get('/admin/package/disable/:name', function ($request, $response) {
         $this->package('global')->flash('Invalid Request', 'error');
         return $this->package('global')->redirect('/admin/package/search');
     }
-    
+
     // get package name
     $name = $request->getStage('name');
 
@@ -602,7 +607,7 @@ $this->get('/admin/package/disable/:name', function ($request, $response) {
 
 /**
  * Render Package Log
- * 
+ *
  * @param Request $request
  * @param Response $response
  */
@@ -636,4 +641,29 @@ $this->get('/admin/package/log/:log', function ($request, $response) {
     }
 
     return $response->set('json', []);
+});
+
+$this->post('/admin/package/rearrange', function ($request, $response) {
+    //----------------------------//
+    // 1. Get Data
+    $data = [];
+    if ($request->getStage()) {
+        $data = $request->getStage();
+    }
+
+    // get the package config
+    $config = $this->package('global')->config('packages');
+
+    $packages = [];
+    if ($data['packages']) {
+        foreach ($data['packages'] as $package) {
+            if (isset($config[$package])) {
+                $packages[$package] = $config[$package];
+            }
+        }
+    }
+
+    $this->package('global')->config('packages', $packages);
+
+    $response->setError(false);
 });

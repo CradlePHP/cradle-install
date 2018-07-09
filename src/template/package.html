@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                     {{#each rows}}
-                        <tr>
+                        <tr data-package="{{@key}}">
                             <td>
                                 {{#if install_pending}}
                                     <i class="fas fa-spinner fa-spin text-muted"></i>
@@ -69,6 +69,24 @@
                                         <i class="fas fa-reply"></i>
                                     </a>
                                     {{/if}}
+                                    <a
+                                        class="move-up-trigger"
+                                        data-do="package-move-up"
+                                        data-on="click"
+                                        data-level="2"
+                                        href="javascript:void(0)"
+                                    >
+                                        <i class="fas fa-arrow-up fa-fw"></i>
+                                    </a>
+                                    <a
+                                        class="move-down-trigger"
+                                        data-do="package-move-down"
+                                        data-on="click"
+                                        data-level="2"
+                                        href="javascript:void(0)"
+                                    >
+                                        <i class="fas fa-arrow-down fa-fw"></i>
+                                    </a>
 
                                     {{#if active}}
                                         {{#if installable}}
@@ -89,12 +107,12 @@
                                 {{/if}}
 
                                 {{#if install_log}}
-                                    <a 
-                                        href="#" 
-                                        class="text-muted" 
+                                    <a
+                                        href="#"
+                                        class="text-muted"
                                         title="Package Log"
                                         data-log="{{log_key}}"
-                                        data-toggle="modal" 
+                                        data-toggle="modal"
                                         data-target="#packageLogModal"
                                     >
                                         <i class="fas fa-history"></i>
@@ -108,7 +126,7 @@
 
                                 <em>
                                     {{#if description}}
-                                        {{description}}           
+                                        {{description}}
                                     {{else}}
                                         No Description
                                     {{/if}}
