@@ -197,9 +197,15 @@ $this->get('/admin/package/search', function ($request, $response) {
     // 2. Render Template
     $class = 'page-install-package-search page-install';
     $data['title'] = $this->package('global')->translate('Packages');
-    $body = $this->package('cradlephp/cradle-install')->template('package', $data, [
-        'package/_log-modal'
-    ]);
+    $body = $this
+        ->package('cradlephp/cradle-install')
+        ->template(
+            'package',
+            $data,
+            ['package/_log-modal'],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //set content
     $response
@@ -318,9 +324,15 @@ $this->get('/admin/package/packagist/search', function ($request, $response) {
     // 2. Render Template
     $class = 'page-install-package-packagist-search page-install';
     $data['title'] = $this->package('global')->translate('Packagist Search');
-    $body = $this->package('cradlephp/cradle-install')->template('packagist', $data, [
-        'package/_log-modal'
-    ]);
+    $body = $this
+        ->package('cradlephp/cradle-install')
+        ->template(
+            'packagist',
+            $data,
+            ['package/_log-modal'],
+            $response->getPage('template_root'),
+            $response->getPage('partials_root')
+        );
 
     //set content
     $response
