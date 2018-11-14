@@ -27,7 +27,7 @@ return function ($request, $response) {
                 $root = $originalRoot;
             }
 
-            if (!$customPartialRoot) {
+            if (!$customPartialsRoot) {
                 $partialRoot = $originalRoot;
             }
 
