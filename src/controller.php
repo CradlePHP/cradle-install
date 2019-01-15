@@ -462,7 +462,6 @@ $this->get('/admin/package/update/:name', function ($request, $response) {
     return $this->package('global')->redirect('/admin/package/search');
 });
 
-
 /**
  * Process Package Remove
  *
