@@ -3,7 +3,7 @@
     "description": "Cradle Admin Package Manager",
     "type": "cradle-package",
     "require": {
-        "cradlephp/cradle-developer": "~2.2.0",
+        "cradlephp/cradle-developer": "~2.2.1",
         "cradlephp/cradle-admin": "~2.2.0"
     },
     "license": "MIT",
